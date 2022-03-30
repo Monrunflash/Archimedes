@@ -3,7 +3,7 @@
 
 import PySimpleGUI as sg
 import os.path
-import convert_text as r
+import convert_text as ct
 
 sg.theme('Reddit')
 text_input = [
@@ -36,7 +36,7 @@ while True:
         break
     if event == "SENT":
         text = values["-INPUT-"]
-        text = r.convert(text)
+        text = ct.convert(text)
         window["-OUTPUT-"].update(text)
 
 window.close()
