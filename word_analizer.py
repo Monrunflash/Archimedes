@@ -9,6 +9,8 @@ consonantes = ["b","c","d","f","g","h","j","k","l","m","n","ñ","p","q","r","s",
 combination11 = ["v"]
 combination21 = ["v","c"]
 combination22 = ["c","v"]
+combination23 = ["c","c"]
+combination24 = ["v","v"]
 combination31 = ["v","v","v"]
 combination32 = ["v","v","c"]
 combination33 = ["v","c","v"]
@@ -39,163 +41,177 @@ def analizer(t):
     wordSeparated = list()
     wordSeparated = t.split()
     text = list()
-    for w in wordSeparated:
-        segment = ct.punctuation_separator(w)
+    for wordToTest in wordSeparated:
+        segment = ct.punctuation_separator(wordToTest)
         if isinstance(segment, list):
             for p in segment:
                 text.append(p)
         else:
-            text.append(w)
+            text.append(wordToTest)
     text[:] = [x for x in text if x != ""]
-    filter(text)
+    return filter(text)
 
 def filter(t):
     textFiltered = list()
     for w in t:
         syllable = list()
-        distribution = list()
+        distributionLetter = list()
+        wordToTest = list()
         for char in w:
+            wordToTest.append(char)
             if char in vocales:
-                distribution.append("v")
+                distributionLetter.append("v")
             if char in consonantes:
-                print(char)
-                distribution.append("c")
+                distributionLetter.append("c")
             if char not in vocales and char not in consonantes:
-                distribution.append("other")
-        if "other" in distribution:
-            textFiltered.append(distribution)
+                distributionLetter.append("other")
+        if "other" in distributionLetter:
+            textFiltered.append(char)
         else:
-            distLenght = len(distribution)
-            print(distLenght)
+            distLenght = len(distributionLetter)
             while distLenght > 0:
-                print(distLenght)
                 if distLenght == 1:
-                    syllable.append(distribution[0])
+                    syllable.append(wordToTest[0])
                     distLenght -= 1
                 if distLenght == 2:
-                    charToProve = [distribution[0],distribution[1]]
+                    charToProve = [distributionLetter[0],distributionLetter[1]]
                     if charToProve == combination21:
-                        syllable.append("".join((distribution[0],distribution[1])))
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
                         distLenght -= 2
                     if charToProve == combination22:
-                        syllable.append("".join((distribution[0],distribution[1])))
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
                         distLenght -= 2
-                    else:
-                        syllable.append(distribution[0])
-                        syllable.append(distribution[1])
+                    if charToProve == combination23 or charToProve == combination24:
+                        syllable.append(wordToTest[0])
+                        syllable.append(wordToTest[1])
                         distLenght -= 2
                 if distLenght == 3:
-                    charToProve = [distribution[0],distribution[1],distribution[2]]
+                    charToProve = [distributionLetter[0],distributionLetter[1],distributionLetter[2]]
                     if charToProve == combination31:
-                        syllable.append(distribution[0])
-                        syllable.append(distribution[1])
-                        syllable.append(distribution[2])
+                        syllable.append(wordToTest[0])
+                        syllable.append(wordToTest[1])
+                        syllable.append(wordToTest[2])
                         distLenght -= 3
                     if charToProve == combination32:
-                        syllable.append(distribution[0])
-                        syllable.append("".join((distribution[1],distribution[2])))
+                        syllable.append(wordToTest[0])
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
                         distLenght -= 3
                     if charToProve == combination33:
-                        syllable.append(distribution[0])
-                        syllable.append("".join((distribution[1],distribution[2])))
+                        syllable.append(wordToTest[0])
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
                         distLenght -= 3
                     if charToProve == combination34:
-                        syllable.append("".join((distribution[0],distribution[1])))
-                        syllable.append(distribution[2])
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        syllable.append(wordToTest[2])
                         distLenght -= 3
                     if charToProve == combination35:
-                        syllable.append("".join((distribution[0],distribution[1])))
-                        syllable.append(distribution[2])
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        syllable.append(wordToTest[2])
                         distLenght -= 3
                     if charToProve == combination36:
-                        syllable.append("".join((distribution[0],distribution[1],distribution[2])))
+                        syllable.append("".join((wordToTest[0],wordToTest[1],wordToTest[2])))
                         distLenght -= 3
                     if charToProve == combination37:
-                        syllable.append(distribution[0])
-                        syllable.append("".join((distribution[1],distribution[2])))
+                        syllable.append(wordToTest[0])
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
                         distLenght -= 3
                     if charToProve == combination38:
-                        syllable.append(distribution[0])
-                        syllable.append(distribution[1])
-                        syllable.append(distribution[2])
+                        syllable.append(wordToTest[0])
+                        syllable.append(wordToTest[1])
+                        syllable.append(wordToTest[2])
                         distLenght -= 3
                 if distLenght > 3:
-                    charToProve = [distribution[0],distribution[1],distribution[2],distribution[3]]
+                    charToProve = [distributionLetter[0],distributionLetter[1],distributionLetter[2],distributionLetter[3]]
                     if charToProve == combination41:
-                        syllable.append(distribution[0])
-                        syllable.append(distribution[1])
-                        syllable.append(distribution[2])
-                        del(distribution[0:3])
+                        syllable.append(wordToTest[0])
+                        syllable.append(wordToTest[1])
+                        syllable.append(wordToTest[2])
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
                     if charToProve == combination42:
-                        syllable.append(distribution[0])
-                        syllable.append(distribution[1])
-                        del(distribution[0:2])
+                        syllable.append(wordToTest[0])
+                        syllable.append(wordToTest[1])
+                        del(wordToTest[0:2])
+                        del(distributionLetter[0:2])
                         distLenght -= 2
                     if charToProve == combination43:
-                        syllable.append(distribution[0])
-                        del(distribution[0])
+                        syllable.append(wordToTest[0])
+                        del(wordToTest[0])
+                        del(distributionLetter[0])
                         distLenght -= 1
                     if charToProve == combination44:
-                        syllable.append(distribution[0])
-                        syllable.append("".join((distribution[1],distribution[2])))
-                        del(distribution[0:3])
+                        syllable.append(wordToTest[0])
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
                     if charToProve == combination45:
-                        syllable.append(distribution[0])
-                        syllable.append("".join((distribution[1],distribution[2])))
-                        del(distribution[0:3])
+                        syllable.append(wordToTest[0])
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
                     if charToProve == combination46:
-                        syllable.append(distribution[0])
-                        del(distribution[0])
+                        syllable.append(wordToTest[0])
+                        del(wordToTest[0])
+                        del(distributionLetter[0])
                         distLenght -= 1
                     if charToProve == combination47:
-                        print("7s")
-                        syllable.append("".join((distribution[0],distribution[1])))
-                        del(distribution[0:2])
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        del(wordToTest[0:2])
+                        del(distributionLetter[0:2])
                         distLenght -= 2
                     if charToProve == combination48:
-                        syllable.append("".join((distribution[0],distribution[1])))
-                        syllable.append(distribution[2])
-                        del(distribution[0:3])
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        syllable.append(wordToTest[2])
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
                     if charToProve == combination49:
-                        syllable.append("".join((distribution[0],distribution[1])))
-                        syllable.append(distribution[2])
-                        del(distribution[0:3])
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        syllable.append(wordToTest[2])
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
                     if charToProve == combination410:
-                        syllable.append("".join((distribution[0],distribution[1])))
-                        del(distribution[0:2])
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        del(wordToTest[0:2])
+                        del(distributionLetter[0:2])
                         distLenght -= 2
                     if charToProve == combination411:
-                        syllable.append("".join((distribution[0],distribution[1])))
-                        del(distribution[0:2])
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        del(wordToTest[0:2])
+                        del(distributionLetter[0:2])
                         distLenght -= 2
                     if charToProve == combination412:
-                        syllable.append("".join((distribution[0],distribution[1],distribution[2])))
-                        del(distribution[0:3])
+                        syllable.append("".join((wordToTest[0],wordToTest[1],wordToTest[2])))
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
                     if charToProve == combination413:
-                        syllable.append(distribution[0])
-                        syllable.append("".join((distribution[1],distribution[2])))
-                        del(distribution[0:3])
+                        syllable.append(wordToTest[0])
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
                     if charToProve == combination414:
-                        syllable.append(distribution[0])
-                        del(distribution[0])
+                        syllable.append(wordToTest[0])
+                        del(wordToTest[0])
+                        del(distributionLetter[0])
                         distLenght -= 1
                     if charToProve == combination415:
-                        syllable.append(distribution[0])
-                        syllable.append(distribution[1])
-                        del(distribution[0:2])
+                        syllable.append(wordToTest[0])
+                        syllable.append(wordToTest[1])
+                        del(wordToTest[0:2])
+                        del(distributionLetter[0:2])
                         distLenght -= 2
                     if charToProve == combination416:
-                        syllable.append(distribution[0])
-                        syllable.append(distribution[1])
-                        syllable.append(distribution[2])
-                        del(distribution[0:3])
+                        syllable.append(wordToTest[0])
+                        syllable.append(wordToTest[1])
+                        syllable.append(wordToTest[2])
+                        del(wordToTest[0:3])
+                        del(distributionLetter[0:3])
                         distLenght -= 3
             textFiltered.append(syllable)
     print(textFiltered)

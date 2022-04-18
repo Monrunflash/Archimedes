@@ -4,6 +4,10 @@
 import PySimpleGUI as sg
 import os.path
 import convert_text as ct
+import audio2 as audio
+from tkinter import *
+import pygame
+import time
 
 sg.theme('Reddit')
 text_input = [
@@ -38,5 +42,6 @@ while True:
         text = values["-INPUT-"]
         text = ct.convert(text)
         window["-OUTPUT-"].update(text)
+        audio.play(text)
 
 window.close()
