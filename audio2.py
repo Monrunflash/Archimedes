@@ -3,6 +3,7 @@ import time
 import os
 
 pygame.mixer.init()
+pygame.mixer.music.set_volume(1.0)
 
 def play(textToPlay):
     for words in textToPlay:
@@ -12,4 +13,4 @@ def play(textToPlay):
             if os.path.isfile(path):
                 pygame.mixer.music.load(path)
                 pygame.mixer.music.play(loops=0)
-                time.sleep(0.28)
+                time.sleep(0.25)

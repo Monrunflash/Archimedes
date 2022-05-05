@@ -7,6 +7,7 @@ tonica = ["á","é","í","ó","ú"]
 consonantes = ["b","c","d","f","g","h","j","k","l","m","n","ñ","p","q","r","s","t","v","w","x","y","z"]
 
 combination11 = ["v"]
+combination12 = ["c"]
 combination21 = ["v","c"]
 combination22 = ["c","v"]
 combination23 = ["c","c"]
@@ -70,6 +71,7 @@ def filter(t):
         else:
             distLenght = len(distributionLetter)
             while distLenght > 0:
+                print(distributionLetter)
                 if distLenght == 1:
                     syllable.append(wordToTest[0])
                     distLenght -= 1
