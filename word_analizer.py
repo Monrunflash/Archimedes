@@ -5,6 +5,10 @@ import convert_text as ct
 vocales = ["a","e","i","o","u"]
 tonica = ["á","é","í","ó","ú"]
 consonantes = ["b","c","d","f","g","h","j","k","l","m","n","ñ","p","q","r","s","t","v","w","x","y","z"]
+numbers = {"uno":"1","dos":"2","tres":"3","cuatro":"4","cinco":"5","seis":"6"\
+,"siete":"7","ocho":"8","nueve":"9"}
+pronouns1 = ["que","cuando","como","donde","cual","cuales","cuanto","cuantos"]
+pronouns2 = ["vosotros","nosotros","ellos","ellas"]
 
 combination11 = ["v"]
 combination12 = ["c"]
@@ -71,7 +75,6 @@ def filter(t):
         else:
             distLenght = len(distributionLetter)
             while distLenght > 0:
-                print(distributionLetter)
                 if distLenght == 1:
                     syllable.append(wordToTest[0])
                     distLenght -= 1
@@ -218,3 +221,24 @@ def filter(t):
             textFiltered.append(syllable)
     print(textFiltered)
     return textFiltered
+
+
+def last_filter(t):
+    reviewedText = list()
+    for word in t:
+        wordJoined = "".join(word)
+        if wordJoined in numbers:
+            reviewedText.append(numbers.get(wordJoined))
+            print("num")
+        elif wordJoined in pronouns1:
+            w = [wordJoined]
+            reviewedText.append(w)
+            print("pron1")
+        elif wordJoined in pronouns2:
+            w = [wordJoined]
+            reviewedText.append(w)
+            print("pron2")
+        else:
+            reviewedText.append(word)
+            print("normal")
+    return reviewedText

@@ -1,28 +1,17 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-from tkinter import *
 import pygame
 import time
-
-root = Tk()
-root.title("Hola")
-root.geometry("500x400")
+import os
 
 pygame.mixer.init()
+pygame.mixer.music.set_volume(1.0)
 
-def play():
-    for s in text:
-        print(s)
-        if s != " ":
-            pygame.mixer.music.load(f"Audacity/{s}.mp3")
-            pygame.mixer.music.play(loops=0)
-            time.sleep(0.28)
-        else:
-            time.sleep(0.3)
-
-text = ["to","to","ro"," ","mi"," ","pe","li","cu","la"," ","fa","vo","ri","ta"]
-my_button = Button(root, text="Play Audio", command=play)
-my_button.pack(pady=20)
-
-root.mainloop()
+def play(textToPlay):
+    for words in textToPlay:
+        time.sleep(0.28)
+        for syll in words:
+            print(syll)
+            path = f"Audacity/{syll}.mp3"
+            if os.path.isfile(path):
+                pygame.mixer.music.load(path)
+                pygame.mixer.music.play(loops=0)
+                time.sleep(0.25)

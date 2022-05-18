@@ -7,7 +7,8 @@ import pygame
 import time
 import os.path
 import convert_text as ct
-import audio2 as audio
+import word_analizer as wa
+import audio
 
 def read_file():
     if os.path.isfile("config.txt"):
@@ -119,6 +120,8 @@ while True:
         text = values["-INPUT-"]
         text = ct.convert(text)
         window["-OUTPUT-"].update(text)
+        text = wa.last_filter(text)
+        print(text)
         audio.play(text)
     if event == "Enviar Configuración":
         configToSave = list()
