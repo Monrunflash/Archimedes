@@ -9,6 +9,8 @@ numbers = {"uno":"1","dos":"2","tres":"3","cuatro":"4","cinco":"5","seis":"6"\
 ,"siete":"7","ocho":"8","nueve":"9"}
 pronouns1 = ["que","cuando","como","donde","cual","cuales","cuanto","cuantos"]
 pronouns2 = ["vosotros","nosotros","ellos","ellas"]
+courtesy = ["hola","adios","gracias"]
+ar = ["ra","re","ri","ro","ru"]
 
 combination11 = ["v"]
 combination12 = ["c"]
@@ -63,15 +65,24 @@ def filter(t):
         distributionLetter = list()
         wordToTest = list()
         for char in w:
-            wordToTest.append(char)
-            if char in vocales:
-                distributionLetter.append("v")
-            if char in consonantes:
-                distributionLetter.append("c")
-            if char not in vocales and char not in consonantes:
-                distributionLetter.append("other")
+            print(char)
+            try:
+                wordToTest.append(char)
+                if char in vocales:
+                    distributionLetter.append("v")
+                if char in consonantes:
+                    distributionLetter.append("c")
+                if int(char) or int(char) == 0:
+                    distributionLetter.append("n")
+                if char not in vocales and char not in consonantes and int(char) not in range(0,10):
+                    distributionLetter.append("other")
+            except ValueError:
+                pass
         if "other" in distributionLetter:
             textFiltered.append(char)
+        elif "n" in distributionLetter:
+            textFiltered.append(w)
+            print(textFiltered,"filtros")
         else:
             distLenght = len(distributionLetter)
             while distLenght > 0:
@@ -219,26 +230,54 @@ def filter(t):
                         del(distributionLetter[0:3])
                         distLenght -= 3
             textFiltered.append(syllable)
-    print(textFiltered)
+    print(textFiltered,"texto filtrado")
     return textFiltered
 
 
 def last_filter(t):
     reviewedText = list()
     for word in t:
+        word = ar_sound(word)
         wordJoined = "".join(word)
         if wordJoined in numbers:
             reviewedText.append(numbers.get(wordJoined))
-            print("num")
+            #print("num")
         elif wordJoined in pronouns1:
             w = [wordJoined]
             reviewedText.append(w)
-            print("pron1")
+            #print("pron1")
         elif wordJoined in pronouns2:
             w = [wordJoined]
             reviewedText.append(w)
-            print("pron2")
+            #print("pron2")
+        elif wordJoined in courtesy:
+            w = [wordJoined]
+            reviewedText.append(w)
+            #print("court")
         else:
             reviewedText.append(word)
-            print("normal")
+            #print("normal")
     return reviewedText
+
+def ar_sound(w):
+    newText = list()
+    i = 0
+    syll = str()
+    lenght = len(w)
+    while i < lenght:
+        if w[i] in consonantes:
+            if i < (lenght):
+                try:
+                    if w[i+1] in ar:
+                        syll = w[i] + w[i+1]
+                        newText.append(syll)
+                        i += 1
+                    else:
+                        newText.append(w[i])
+                except IndexError:
+                    print()
+        else:
+            newText.append(w[i])
+        i += 1
+    return newText
+        #if syll in consonantes:

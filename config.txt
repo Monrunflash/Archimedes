@@ -1,5 +1,5 @@
 first_config=No
-resolution=200,200
-font_size=12
-font_style=Times New Roman
-color=Rojo
+resolution=Pequeña
+font_size=14
+font_style=Lucida
+color=Azul

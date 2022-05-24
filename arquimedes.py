@@ -59,9 +59,9 @@ def configuration_window():
     config_menu = [
         [
         sg.Text("Resolución = "),
-        sg.Combo(["200,200","300,300","400,400","500,500","600,600","700,700","800,800"],default_value="200,200",key="-RESOLUTION-"),
+        sg.Combo(["Pequeña","Mediana","Grande"],default_value="Pequeña",key="-RESOLUTION-"),
         sg.Text("Tamaño de letra = "),
-        sg.InputText(key="-FONT_SIZE-"),
+        sg.Combo(["12","13","14","15","16"],default_value="12",key="-FONT_SIZE-"),
         sg.Text("Estilo de letra = "),
         sg.Combo(["Courier New","Times New Roman","Arial","Lucida"],default_value="Courier New",key="-FONT_STYLE-"),
         sg.Text("Color de la interfaz = "),
@@ -86,42 +86,59 @@ def spanish_window(c):
     if c[3] == "Verde":
         sg.theme('GreenMono')
     text_input = [
-    [
-    sg.Text("Input text:"),
-    sg.Multiline(size=(40,20), font=(c[2],c[1]), enable_events=True, key="-INPUT-"),
-    sg.Button("Enviar")
-    ]
+    [sg.Text("Input text:"),
+    sg.Multiline(size=(35,15), font=(c[2],c[1]), enable_events=True, key="-INPUT-")],
+    [sg.Button("Enviar"), sg.Button("Config")]
     ]
 
     text_output = [
     [sg.Text("Clear Text:")],
-    [sg.Text(size=(40,20), key="-OUTPUT-")],
-    [sg.Image(key="-IMAGE-")],
+    [sg.Text(size=(20,15), key="-OUTPUT-")],
+    [sg.Image(filename="buho_m6.png",key="-IMG-")],
     ]
 
     layout = [
     [
-    sg.Column(text_input),
+    sg.Column(text_input,element_justification="c"),
     sg.VSeparator(),
-    sg.Column(text_output),
+    sg.Column(text_output,element_justification="c"),
     ]
     ]
 
     return sg.Window("Archimedes", layout, finalize=True)
 
 valuesOfConfiguration = read_file()
-window = established_cofig(valuesOfConfiguration)
+if valuesOfConfiguration == True:
+    window2, window1 = established_cofig(valuesOfConfiguration), None
+else:
+    window1, window2 = established_cofig(valuesOfConfiguration), None
 
 while True:
-    event, values = window.read()
+    window, event, values = sg.read_all_windows()
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
     if event == "Enviar":
         text = values["-INPUT-"]
         text = ct.convert(text)
-        window["-OUTPUT-"].update(text)
         text = wa.last_filter(text)
-        print(text)
+        window["-OUTPUT-"].update(text)
+        window.read(timeout=100)
+        i = 0
+        while i < 3:
+            window["-IMG-"].update(filename="buho_m2.png")
+            window.read(timeout=100)
+            #print("abierta")
+            time.sleep(0.4)
+            window["-IMG-"].update(filename="buho_m3.png")
+            window.read(timeout=100)
+            #print("cerrada")
+            i+=1
+            if i == 3:
+                window["-IMG-"].update(filename="buho_m4.png")
+                window.read(timeout=100)
+                time.sleep(0.6)
+                window["-IMG-"].update(filename="buho_m5.png")
+                window.read(timeout=100)
         audio.play(text)
     if event == "Enviar Configuración":
         configToSave = list()
@@ -130,5 +147,8 @@ while True:
         save_config(configToSave)
         established_cofig(configToSave)
         read_file()
-
+        window2.close()
+    if event == "Config" and not window2:
+        window2 = configuration_window()
+        window1.close()
 window.close()

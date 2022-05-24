@@ -7,11 +7,11 @@ pygame.mixer.music.set_volume(1.0)
 
 def play(textToPlay):
     for words in textToPlay:
-        time.sleep(0.28)
+        time.sleep(0.32)
         for syll in words:
             print(syll)
             path = f"Audacity/{syll}.mp3"
             if os.path.isfile(path):
                 pygame.mixer.music.load(path)
                 pygame.mixer.music.play(loops=0)
-                time.sleep(0.25)
+                time.sleep(0.28)
