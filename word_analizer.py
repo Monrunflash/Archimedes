@@ -11,6 +11,7 @@ pronouns1 = ["que","cuando","como","donde","cual","cuales","cuanto","cuantos"]
 pronouns2 = ["vosotros","nosotros","ellos","ellas"]
 courtesy = ["hola","adios","gracias"]
 ar = ["ra","re","ri","ro","ru"]
+q = ["e","i"]
 
 combination11 = ["v"]
 combination12 = ["c"]
@@ -125,7 +126,11 @@ def filter(t):
                         syllable.append(wordToTest[2])
                         distLenght -= 3
                     if charToProve == combination36:
-                        syllable.append("".join((wordToTest[0],wordToTest[1],wordToTest[2])))
+                        print("uion de tres")
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        textFiltered.append(syllable)
+                        syllable = list()
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
                         distLenght -= 3
                     if charToProve == combination37:
                         syllable.append(wordToTest[0])
@@ -201,7 +206,10 @@ def filter(t):
                         del(distributionLetter[0:2])
                         distLenght -= 2
                     if charToProve == combination412:
-                        syllable.append("".join((wordToTest[0],wordToTest[1],wordToTest[2])))
+                        syllable.append("".join((wordToTest[0],wordToTest[1])))
+                        textFiltered.append(syllable)
+                        syllable = list()
+                        syllable.append("".join((wordToTest[1],wordToTest[2])))
                         del(wordToTest[0:3])
                         del(distributionLetter[0:3])
                         distLenght -= 3
@@ -238,6 +246,8 @@ def last_filter(t):
     reviewedText = list()
     for word in t:
         word = ar_sound(word)
+        word = qu_sound(word)
+        word = gu_sound(word)
         wordJoined = "".join(word)
         if wordJoined in numbers:
             reviewedText.append(numbers.get(wordJoined))
@@ -281,3 +291,46 @@ def ar_sound(w):
         i += 1
     return newText
         #if syll in consonantes:
+def qu_sound(w):
+    newText = list()
+    i = 0
+    syll = str()
+    lenght = len(w)
+    while i < lenght:
+        if w[i] == "qu":
+            if i < (lenght):
+                try:
+                    if w[i+1] in q:
+                        syll = w[i] + w[i+1]
+                        newText.append(syll)
+                        i += 1
+                    else:
+                        newText.append(w[i])
+                except IndexError:
+                    print()
+        else:
+            newText.append(w[i])
+        i += 1
+    return newText
+
+def gu_sound(w):
+    newText = list()
+    i = 0
+    syll = str()
+    lenght = len(w)
+    while i < lenght:
+        if w[i] == "gu":
+            if i < (lenght):
+                try:
+                    if w[i+1] in q:
+                        syll = w[i] + w[i+1]
+                        newText.append(syll)
+                        i += 1
+                    else:
+                        newText.append(w[i])
+                except IndexError:
+                    print()
+        else:
+            newText.append(w[i])
+        i += 1
+    return newText

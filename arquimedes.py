@@ -9,6 +9,7 @@ import os.path
 import convert_text as ct
 import word_analizer as wa
 import audio
+from gtts import gTTS
 
 def read_file():
     if os.path.isfile("config.txt"):
@@ -57,17 +58,15 @@ def established_cofig(c):
 
 def configuration_window():
     config_menu = [
-        [
-        sg.Text("Resolución = "),
-        sg.Combo(["Pequeña","Mediana","Grande"],default_value="Pequeña",key="-RESOLUTION-"),
-        sg.Text("Tamaño de letra = "),
-        sg.Combo(["12","13","14","15","16"],default_value="12",key="-FONT_SIZE-"),
-        sg.Text("Estilo de letra = "),
-        sg.Combo(["Courier New","Times New Roman","Arial","Lucida"],default_value="Courier New",key="-FONT_STYLE-"),
-        sg.Text("Color de la interfaz = "),
-        sg.Combo(["Azul","Rojo","Verde"],default_value="Azul",key="-COLOR-"),
-        sg.Button("Enviar Configuración")
-        ]
+        [sg.Text("Resolución = ")],
+        [sg.Combo(["Pequeña","Mediana","Grande"],default_value="Pequeña",key="-RESOLUTION-")],
+        [sg.Text("Tamaño de letra = ")],
+        [sg.Combo(["12","13","14","15","16"],default_value="12",key="-FONT_SIZE-")],
+        [sg.Text("Estilo de letra = ")],
+        [sg.Combo(["Courier New","Times New Roman","Arial","Lucida"],default_value="Courier New",key="-FONT_STYLE-")],
+        [sg.Text("Color de la interfaz = ")],
+        [sg.Combo(["Azul","Rojo","Verde"],default_value="Azul",key="-COLOR-")],
+        [sg.Button("Enviar Configuración")]
     ]
 
     layout = [
@@ -86,6 +85,7 @@ def spanish_window(c):
     if c[3] == "Verde":
         sg.theme('GreenMono')
     text_input = [
+    [sg.Combo(["Español","Inglés"],default_value="Español",key="-IDIOM-")],
     [sg.Text("Input text:"),
     sg.Multiline(size=(35,15), font=(c[2],c[1]), enable_events=True, key="-INPUT-")],
     [sg.Button("Enviar"), sg.Button("Config")]
@@ -94,7 +94,7 @@ def spanish_window(c):
     text_output = [
     [sg.Text("Clear Text:")],
     [sg.Text(size=(20,15), key="-OUTPUT-")],
-    [sg.Image(filename="buho_m6.png",key="-IMG-")],
+    [sg.Image(filename="img/buho_m6.png",key="-IMG-")]
     ]
 
     layout = [
@@ -119,27 +119,36 @@ while True:
         break
     if event == "Enviar":
         text = values["-INPUT-"]
-        text = ct.convert(text)
-        text = wa.last_filter(text)
-        window["-OUTPUT-"].update(text)
-        window.read(timeout=100)
-        i = 0
-        while i < 3:
-            window["-IMG-"].update(filename="buho_m2.png")
+        idiom = values["-IDIOM-"]
+        print(idiom)
+        if idiom == "Español":
+            text = ct.convert(text)
+            text = wa.last_filter(text)
+            window["-OUTPUT-"].update(text)
             window.read(timeout=100)
-            #print("abierta")
-            time.sleep(0.4)
-            window["-IMG-"].update(filename="buho_m3.png")
-            window.read(timeout=100)
-            #print("cerrada")
-            i+=1
-            if i == 3:
-                window["-IMG-"].update(filename="buho_m4.png")
+            i = 0
+            while i < 3:
+                window["-IMG-"].update(filename="img/buho_m2.png")
                 window.read(timeout=100)
-                time.sleep(0.6)
-                window["-IMG-"].update(filename="buho_m5.png")
+                #print("abierta")
+                time.sleep(0.4)
+                window["-IMG-"].update(filename="img/buho_m3.png")
                 window.read(timeout=100)
-        audio.play(text)
+                #print("cerrada")
+                i+=1
+                if i == 3:
+                    window["-IMG-"].update(filename="img/buho_m4.png")
+                    window.read(timeout=100)
+                    time.sleep(0.6)
+                    window["-IMG-"].update(filename="img/buho_m5.png")
+                    window.read(timeout=100)
+                    audio.play(text)
+        if idiom == "Inglés":
+            language = "en"
+            output = gTTS(text=text, lang=language, slow=False)
+            output.save("output.mp3")
+            audio.playEnglish("output.mp3")
+            os.system("rm -f output.mp3")
     if event == "Enviar Configuración":
         configToSave = list()
         configToSave = [values["-RESOLUTION-"],values["-FONT_SIZE-"],values["-FONT_STYLE-"],values["-COLOR-"]]

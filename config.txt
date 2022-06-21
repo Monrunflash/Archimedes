@@ -1,5 +1,5 @@
 first_config=No
 resolution=Pequeña
-font_size=14
-font_style=Lucida
+font_size=16
+font_style=Times New Roman
 color=Azul
