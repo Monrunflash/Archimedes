@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 import re
 import word_analizer as wa
-
+#patrones de signos para aplicar la normalización del texto
 patternText = "[a-zA-Z0-9]|[á-úÁ-Ú]| |,|;|\.|:|\(|\)|\¿|\?|\¡|\!"
 patternPunctuation = ",|;|\.|:|\(|\)|\¿|\?|\¡|\!"
 patternWord = "[a-zA-Z0-9]|[á-úÁ-Ú]"
 
+#función por la que pasa el texto y es separado y filtrado según pertenezca a
+#signos permitidos o signos prohibidos
 def convert(t):
     cleanText = str()
     for char in t:
@@ -16,6 +18,8 @@ def convert(t):
     cleanText = wa.analizer(cleanText)
     return cleanText
 
+#función para separar la palabra que tenga un signo de puntuación unido a ella
+#por ejemplo: ["hola."], donde deberiamos separar el "hola" del "."
 def punctuation_separator(w):
     if (re.search(patternPunctuation, w)):
         wordInList = list()

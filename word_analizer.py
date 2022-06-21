@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import convert_text as ct
 
+#patrones de vocales y consonantes y una serie de palabras habituales para crear
+#una sintesis más realista
 vocales = ["a","e","i","o","u"]
 tonica = ["á","é","í","ó","ú"]
 consonantes = ["b","c","d","f","g","h","j","k","l","m","n","ñ","p","q","r","s","t","v","w","x","y","z"]
@@ -13,6 +15,9 @@ courtesy = ["hola","adios","gracias"]
 ar = ["ra","re","ri","ro","ru"]
 q = ["e","i"]
 
+#creación de la estructura principal del patrón de separación según exista combinaciones
+#de vocales y consonantes. Por ejemplo: una "consonante" y una "vocal" siempre formarán
+#una sílaba junta. En cambio, dos "c" formarán sílabas diferentes
 combination11 = ["v"]
 combination12 = ["c"]
 combination21 = ["v","c"]
@@ -44,7 +49,8 @@ combination414 = ["c","c","v","c"]
 combination415 = ["c","c","c","v"]
 combination416 = ["c","c","c","c"]
 
-
+#función que separa las palabras y las mete en una variable de tipo realista
+#esta función pasará cada palabra a la función que separa las palabras de los signos
 def analizer(t):
     wordSeparated = list()
     wordSeparated = t.split()
@@ -59,6 +65,9 @@ def analizer(t):
     text[:] = [x for x in text if x != ""]
     return filter(text)
 
+#función encargada de analizar la palabra y discernir las sílabas que la componen
+#se caracteriza por ser resiliente y tenerse que aplicar filtros con excepciones
+#ya que no es perfecta la separación que lleva a cabo
 def filter(t):
     textFiltered = list()
     for w in t:
@@ -66,7 +75,9 @@ def filter(t):
         distributionLetter = list()
         wordToTest = list()
         for char in w:
-            print(char)
+            #crea una variable nueva donde la palabra para a ser un conjunto de
+            #"v" y "c" para realizar una comprobación más sencilla según los patrones
+            #anotados arriba
             try:
                 wordToTest.append(char)
                 if char in vocales:
@@ -83,7 +94,6 @@ def filter(t):
             textFiltered.append(char)
         elif "n" in distributionLetter:
             textFiltered.append(w)
-            print(textFiltered,"filtros")
         else:
             distLenght = len(distributionLetter)
             while distLenght > 0:
@@ -126,7 +136,6 @@ def filter(t):
                         syllable.append(wordToTest[2])
                         distLenght -= 3
                     if charToProve == combination36:
-                        print("uion de tres")
                         syllable.append("".join((wordToTest[0],wordToTest[1])))
                         textFiltered.append(syllable)
                         syllable = list()
@@ -238,10 +247,11 @@ def filter(t):
                         del(distributionLetter[0:3])
                         distLenght -= 3
             textFiltered.append(syllable)
-    print(textFiltered,"texto filtrado")
     return textFiltered
 
-
+#función en la que suceden los filtros de excepciones, como el filtro que une
+#["qu","e"] en una sola palabra o une ["ho","la"] ya que está palabra está grabada
+#tal cual, porque es de un uso muy habitual.
 def last_filter(t):
     reviewedText = list()
     for word in t:
@@ -251,24 +261,20 @@ def last_filter(t):
         wordJoined = "".join(word)
         if wordJoined in numbers:
             reviewedText.append(numbers.get(wordJoined))
-            #print("num")
         elif wordJoined in pronouns1:
             w = [wordJoined]
             reviewedText.append(w)
-            #print("pron1")
         elif wordJoined in pronouns2:
             w = [wordJoined]
             reviewedText.append(w)
-            #print("pron2")
         elif wordJoined in courtesy:
             w = [wordJoined]
             reviewedText.append(w)
-            #print("court")
         else:
             reviewedText.append(word)
-            #print("normal")
     return reviewedText
 
+#función que comprueba si hay una r en medio de dos sílabas y las une
 def ar_sound(w):
     newText = list()
     i = 0
@@ -285,12 +291,13 @@ def ar_sound(w):
                     else:
                         newText.append(w[i])
                 except IndexError:
-                    print()
+                    pass
         else:
             newText.append(w[i])
         i += 1
     return newText
-        #if syll in consonantes:
+
+#función que comprueba si la sílaba es un "que" o un "qui"
 def qu_sound(w):
     newText = list()
     i = 0
@@ -307,12 +314,13 @@ def qu_sound(w):
                     else:
                         newText.append(w[i])
                 except IndexError:
-                    print()
+                    pass
         else:
             newText.append(w[i])
         i += 1
     return newText
 
+#función que comprueba "gue" o "gui"
 def gu_sound(w):
     newText = list()
     i = 0
@@ -329,7 +337,7 @@ def gu_sound(w):
                     else:
                         newText.append(w[i])
                 except IndexError:
-                    print()
+                    pass
         else:
             newText.append(w[i])
         i += 1

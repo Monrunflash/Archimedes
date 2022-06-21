@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# importación de librerias y modulos
 import PySimpleGUI as sg
 from tkinter import *
 import pygame
@@ -11,6 +12,8 @@ import word_analizer as wa
 import audio
 from gtts import gTTS
 
+
+#lee el fichero de configuración y si no existe lo crea
 def read_file():
     if os.path.isfile("config.txt"):
         file = open("config.txt","r")
@@ -37,6 +40,8 @@ def read_file():
         file.close()
         return True
 
+
+#guarda en el fichero los valores que hemos configurado
 def save_config(c):
     file = open("config.txt","w+")
     reso = "resolution=" + c[0] + "\n"
@@ -50,23 +55,29 @@ def save_config(c):
     file.write(color)
     file.close()
 
+
+#establece que ventana aparece en primer lugar
 def established_cofig(c):
     if c != True:
         return spanish_window(c)
     else:
         return configuration_window()
 
+
+#función que llama a la creación del menu de configuración
 def configuration_window():
     config_menu = [
-        [sg.Text("Resolución = ")],
-        [sg.Combo(["Pequeña","Mediana","Grande"],default_value="Pequeña",key="-RESOLUTION-")],
-        [sg.Text("Tamaño de letra = ")],
-        [sg.Combo(["12","13","14","15","16"],default_value="12",key="-FONT_SIZE-")],
-        [sg.Text("Estilo de letra = ")],
-        [sg.Combo(["Courier New","Times New Roman","Arial","Lucida"],default_value="Courier New",key="-FONT_STYLE-")],
-        [sg.Text("Color de la interfaz = ")],
-        [sg.Combo(["Azul","Rojo","Verde"],default_value="Azul",key="-COLOR-")],
-        [sg.Button("Enviar Configuración")]
+        [
+        sg.Text("Resolución = "),
+        sg.Combo(["Pequeña","Mediana","Grande"],default_value="Pequeña",key="-RESOLUTION-"),
+        sg.Text("Tamaño de letra = "),
+        sg.Combo(["12","13","14","15","16"],default_value="12",key="-FONT_SIZE-"),
+        sg.Text("Estilo de letra = "),
+        sg.Combo(["Courier New","Times New Roman","Arial","Lucida"],default_value="Courier New",key="-FONT_STYLE-"),
+        sg.Text("Color de la interfaz = "),
+        sg.Combo(["Azul","Rojo","Verde"],default_value="Azul",key="-COLOR-"),
+        sg.Button("Enviar Configuración")
+        ]
     ]
 
     layout = [
@@ -77,6 +88,8 @@ def configuration_window():
 
     return sg.Window("Configuración", layout, finalize=True)
 
+
+#función que llamada crea la ventana principal
 def spanish_window(c):
     if c[3] == "Azul":
         sg.theme('Reddit')
@@ -92,8 +105,8 @@ def spanish_window(c):
     ]
 
     text_output = [
-    [sg.Text("Clear Text:")],
-    [sg.Text(size=(20,15), key="-OUTPUT-")],
+    #[sg.Text("Clear Text:")],
+    #[sg.Text(size=(20,15), key="-OUTPUT-")],
     [sg.Image(filename="img/buho_m6.png",key="-IMG-")]
     ]
 
@@ -107,12 +120,15 @@ def spanish_window(c):
 
     return sg.Window("Archimedes", layout, finalize=True)
 
+
 valuesOfConfiguration = read_file()
 if valuesOfConfiguration == True:
     window2, window1 = established_cofig(valuesOfConfiguration), None
 else:
     window1, window2 = established_cofig(valuesOfConfiguration), None
 
+
+#bucle principal en el que se encuentran los eventos que activan el programa
 while True:
     window, event, values = sg.read_all_windows()
     if event == "Exit" or event == sg.WIN_CLOSED:
@@ -120,21 +136,20 @@ while True:
     if event == "Enviar":
         text = values["-INPUT-"]
         idiom = values["-IDIOM-"]
-        print(idiom)
         if idiom == "Español":
+            #parte dedicada al sintetizador en Español
             text = ct.convert(text)
             text = wa.last_filter(text)
-            window["-OUTPUT-"].update(text)
+            #window["-OUTPUT-"].update(text)
             window.read(timeout=100)
             i = 0
+            #bucle en el que se crea el gif del buho
             while i < 3:
                 window["-IMG-"].update(filename="img/buho_m2.png")
                 window.read(timeout=100)
-                #print("abierta")
                 time.sleep(0.4)
                 window["-IMG-"].update(filename="img/buho_m3.png")
                 window.read(timeout=100)
-                #print("cerrada")
                 i+=1
                 if i == 3:
                     window["-IMG-"].update(filename="img/buho_m4.png")
@@ -144,6 +159,7 @@ while True:
                     window.read(timeout=100)
                     audio.play(text)
         if idiom == "Inglés":
+            #parte dedicada al sintetizador en inglés
             language = "en"
             output = gTTS(text=text, lang=language, slow=False)
             output.save("output.mp3")
@@ -152,7 +168,6 @@ while True:
     if event == "Enviar Configuración":
         configToSave = list()
         configToSave = [values["-RESOLUTION-"],values["-FONT_SIZE-"],values["-FONT_STYLE-"],values["-COLOR-"]]
-        print(configToSave)
         save_config(configToSave)
         established_cofig(configToSave)
         read_file()

@@ -1,4 +1,4 @@
-first_config=No
+first_config=Yes
 resolution=Pequeña
 font_size=16
 font_style=Times New Roman
